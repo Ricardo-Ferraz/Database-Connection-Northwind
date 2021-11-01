@@ -19,5 +19,13 @@ public class ControllerCustomer {
 	public int create(String[] inputs) throws SQLException{
 		return this.dao.create(inputs);
 	}
+	
+	public int delete(String customerId) throws SQLException{
+		return this.dao.delete(customerId);
+	}
+	
+	public int update(String[] inputs, String customerId) throws SQLException, Exception{
+		return this.dao.update(inputs, customerId);
+	}
 
 }

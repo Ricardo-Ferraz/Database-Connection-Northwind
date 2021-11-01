@@ -15,13 +15,15 @@ public class CustomerWindow extends JFrame implements ActionListener{
 	private JButton b2;
 	private JButton b3;
 	private JButton b4;
+	private JButton b5;
 	
 	public CustomerWindow() {
 		this.b1= new JButton("Lê todos");
 		this.b2= new JButton("Lê CustomerID");
 		this.b3= new JButton("Inserir");
 		this.b4= new JButton("Remover");
-		this.setLayout(null);
+		this.b5= new JButton("Atualizar");
+		super.setLayout(null);
 		
 		this.b1.setBounds(100, 30, 100, 50);
 		this.b1.addActionListener(this);
@@ -35,16 +37,19 @@ public class CustomerWindow extends JFrame implements ActionListener{
 		this.b4.setBounds(300, 100, 100, 50);
 		this.b4.addActionListener(this);
 		
-		this.getContentPane().add(this.b1);
-        this.getContentPane().add(this.b2);
-        this.getContentPane().add(this.b3);
-		this.getContentPane().add(this.b4);
-	
+		this.b5.setBounds(200, 200, 100, 50);
+		this.b5.addActionListener(this);
+		
+		super.getContentPane().add(this.b1);
+		super.getContentPane().add(this.b2);
+		super.getContentPane().add(this.b3);
+		super.getContentPane().add(this.b4);
+		super.getContentPane().add(this.b5);
         
-		this.setSize(500,500);
-        this.setTitle("Teste Customers");
-        this.setVisible(true);
-        this.setResizable(false);
+		super.setSize(500,500);
+		super.setTitle("Teste Customers");
+		super.setVisible(true);
+		super.setResizable(false);
 	}
 	
 	
@@ -56,11 +61,14 @@ public class CustomerWindow extends JFrame implements ActionListener{
 		else if(e.getSource() == this.b2) { //Lê por CustomerID
 			this.acess.readOne();
 		}
-		else if(e.getSource() == this.b3) { //Insere um customer
+		else if(e.getSource() == this.b3) { //Insere um Customer
 			this.acess.create();
 		}
 		else if(e.getSource() == this.b4) { //Remove um Customer
-			
+			this.acess.delete();
+		}
+		else if(e.getSource() == this.b5) { //Atualiza um Customer
+			this.acess.update();
 		}
 	}
 

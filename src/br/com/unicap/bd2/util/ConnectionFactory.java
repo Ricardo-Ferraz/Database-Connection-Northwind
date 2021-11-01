@@ -30,7 +30,7 @@ public abstract class ConnectionFactory {
 			try {
 				c.close();
 			} catch (SQLException e) {
-				throw new RuntimeException("Erro ao fechar conexão!", e);
+				throw new RuntimeException(e.getMessage(), e);
 			}
 		}
 	}
@@ -42,7 +42,7 @@ public abstract class ConnectionFactory {
 			try {
 				s.close();
 			} catch (SQLException e) {
-				throw new RuntimeException("Erro ao fechar conexão!", e);
+				throw new RuntimeException(e.getMessage(), e);
 			}
 		}
 	}
@@ -54,7 +54,7 @@ public abstract class ConnectionFactory {
 			try {
 				s.close();
 			} catch (SQLException e) {
-				throw new RuntimeException("Erro ao fechar conexão!", e);
+				throw new RuntimeException(e.getMessage(), e);
 			}
 		}
 	}
@@ -66,7 +66,7 @@ public abstract class ConnectionFactory {
 			try {
 				r.close();
 			} catch (SQLException e) {
-				throw new RuntimeException("Erro ao fechar conexão!", e);
+				throw new RuntimeException(e.getMessage(), e);
 			}
 		}
 	}
@@ -78,7 +78,7 @@ public abstract class ConnectionFactory {
 			try {
 				r.close();
 			} catch (SQLException e) {
-				throw new RuntimeException("Erro ao fechar conexão!", e);
+				throw new RuntimeException(e.getMessage(), e);
 			}
 		}
 	}

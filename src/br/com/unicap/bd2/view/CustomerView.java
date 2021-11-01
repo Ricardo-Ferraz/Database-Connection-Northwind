@@ -25,8 +25,8 @@ public class CustomerView {
 
 	private Object[] input = { "CustomerId: ", this.customerId, "CompanyName: ", this.companyName, "ContactName: ",
 			this.contactName, "ContactTitle: ", this.contactTitle, "Adress: ", this.adress, "City: ", this.city,
-			"Region: ", this.region, "PostalCode: ", this.postalCode, "Country: ", this.country,
-			"Phone: ", this.phone, "Fax: ", this.fax};
+			"Region: ", this.region, "PostalCode: ", this.postalCode, "Country: ", this.country, "Phone: ", this.phone,
+			"Fax: ", this.fax };
 
 	public void read() {
 		try {
@@ -56,48 +56,94 @@ public class CustomerView {
 
 	public void create() {
 		try {
-			int opcao = JOptionPane.showConfirmDialog(null, this.input, "Informe os dados", JOptionPane.OK_CANCEL_OPTION);
-			if(opcao == JOptionPane.OK_OPTION) {
-				String[] inputs= this.inputFields();
+			int opcao = JOptionPane.showConfirmDialog(null, this.input, "Informe os dados",
+					JOptionPane.OK_CANCEL_OPTION);
+			if (opcao == JOptionPane.OK_OPTION) {
+				String[] inputs = this.inputFields();
 				this.cleanEmptyFields(inputs);
-				int rows= this.controller.create(inputs);
-				ShowMessage.showInfomationMessage("Linhas afetadas: "+rows, "Sucesso!");
+				int rows = this.controller.create(inputs);
+				ShowMessage.showInfomationMessage("Linhas afetadas: " + rows, "Sucesso!");
 			}
+		} catch (SQLException e) {
+			ShowMessage.showErrorMessage(e.getMessage());
+		} finally {
+			this.cleanInputFields();
+		}
+	}
+
+	public void delete() {
+		try {
+
+			int opcao = JOptionPane.showConfirmDialog(null, this.customerId, "Informe o CustomerId",
+					JOptionPane.OK_CANCEL_OPTION);
+			if (opcao == JOptionPane.OK_OPTION) {
+				int rows= this.controller.delete(this.customerId.getText());
+				ShowMessage.showInfomationMessage("Linhas afetadas: " + rows, "Sucesso!");
+			}
+
+		} catch (SQLException e) {
+			ShowMessage.showErrorMessage(e.getMessage());
+		} finally {
+			this.customerId.setText("");
+		}
+	}
+	
+	public void update() {
+		try {
+			
+			int opcao = JOptionPane.showConfirmDialog(null, this.customerId, "Informe o CustomerId para atualização",
+					JOptionPane.OK_CANCEL_OPTION);
+			if (opcao == JOptionPane.OK_OPTION) {
+				this.controller.readOne(this.customerId.getText());
+				String aux= this.customerId.getText();
+				this.customerId.setText("");
+				opcao = JOptionPane.showConfirmDialog(null, this.input, "Informe os dados para Atualizar",
+						JOptionPane.OK_CANCEL_OPTION);
+				if (opcao == JOptionPane.OK_OPTION) {
+					String[] inputs = this.inputFields();
+					this.cleanEmptyFields(inputs);
+					int rows = this.controller.update(inputs, aux);
+					ShowMessage.showInfomationMessage("Linhas afetadas: " + rows, "Sucesso!");
+				}
+			}
+			
 		}catch(SQLException e) {
+			ShowMessage.showErrorMessage(e.getMessage());
+		}catch(Exception e) {
 			ShowMessage.showErrorMessage(e.getMessage());
 		}finally {
 			this.cleanInputFields();
 		}
 	}
-	
+
 	private String[] inputFields() {
-		String[] fields = new String[this.input.length/2];
-		int cont=0;
-	
-		for(int i=0; i < this.input.length; i++) {
-			if((i % 2 != 0)) {
-				JTextField aux= (JTextField) this.input[i];
+		String[] fields = new String[this.input.length / 2];
+		int cont = 0;
+
+		for (int i = 0; i < this.input.length; i++) {
+			if ((i % 2 != 0)) {
+				JTextField aux = (JTextField) this.input[i];
 				fields[cont] = aux.getText().trim();
 				cont++;
 			}
 		}
-		
+
 		return fields;
 	}
-	
+
 	private void cleanInputFields() {
-		for(int i=0; i < this.input.length; i++) {
-			if(i % 2 != 0) {
-				JTextField aux= (JTextField) this.input[i];
+		for (int i = 0; i < this.input.length; i++) {
+			if (i % 2 != 0) {
+				JTextField aux = (JTextField) this.input[i];
 				aux.setText("");
 			}
 		}
 	}
-	
+
 	private void cleanEmptyFields(String[] inputs) {
-		for(int i=0; i < inputs.length; i++) {
-			if(inputs[i].trim().isEmpty()) {
-				inputs[i]= null;
+		for (int i = 0; i < inputs.length; i++) {
+			if (inputs[i].trim().isEmpty()) {
+				inputs[i] = null;
 			}
 		}
 	}

@@ -22,21 +22,21 @@ public class MainWindow extends JFrame implements ActionListener{
 		this.b1= new JButton("Customers");
 		this.b2= new JButton("Consulta");
 		
-		this.setLayout(null);
+		super.setLayout(null);
 		this.b1.setBounds(100, 30, 100, 50);
 		this.b1.addActionListener(this);
 		this.b2.setBounds(300, 30, 100, 50);
 		this.b2.addActionListener(this);
 		
-		this.getContentPane().add(this.b1);
-		this.getContentPane().add(this.b2);
+		super.getContentPane().add(this.b1);
+		super.getContentPane().add(this.b2);
 		
-		this.setSize(500, 500);
-		this.setTitle("Teste");
-		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.setLocationRelativeTo(null);
-        this.setResizable(false);
-        this.setVisible(true);
+		super.setSize(500, 500);
+		super.setTitle("Teste");
+		super.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		super.setLocationRelativeTo(null);
+		super.setResizable(false);
+		super.setVisible(true);
 	}
 
 	@Override

@@ -33,7 +33,6 @@ public class GenericDAO {
 		while(rs.next()) {
 			for(int i=1; i<= rsmd.getColumnCount(); i++ ) {
 				sb.append(rsmd.getColumnName(i)).append(": ").append(rs.getString(i)).append("\n");
-				
 			}
 			sb.append("\n");
 		}
