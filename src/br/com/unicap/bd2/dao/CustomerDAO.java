@@ -26,9 +26,8 @@ public class CustomerDAO {
 		}
 		return instance;
 	}
-
-	private List<Customer> readAll() throws SQLException {
-		String query = "SELECT * FROM Customers;";
+	
+	private List<Customer> readConfig(String query) throws SQLException {
 		List<Customer> list = new ArrayList<Customer>();
 
 		Connection con = ConnectionFactory.getConnection();
@@ -51,6 +50,11 @@ public class CustomerDAO {
 		return list;
 	}
 
+	private List<Customer> readAll() throws SQLException {
+		String query = "SELECT * FROM Customers;";
+		return readConfig(query);
+	}
+
 	public String read() throws SQLException {
 		StringBuilder sb = new StringBuilder();
 		List<Customer> list = readAll();
@@ -63,12 +67,11 @@ public class CustomerDAO {
 	}
 
 	public String readOne(String customerId) throws Exception, SQLException {
-		List<Customer> list = readAll();
+		String query = "select * from Customers where CustomerID = '"+customerId+"';";
+		List<Customer> list = readConfig(query);
 
 		for (Customer c : list) {
-			if (c.getCustomerId().equalsIgnoreCase(customerId)) {
-				return c.toString();
-			}
+			return c.toString();
 		}
 		throw new Exception("CustomerId não encontrado no banco!");
 	}

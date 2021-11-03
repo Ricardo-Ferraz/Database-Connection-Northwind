@@ -14,6 +14,7 @@ public class MainWindow extends JFrame implements ActionListener{
 	
 	private JButton b1;
 	private JButton b2;
+	private JButton b3;
 	
 	
 	public MainWindow() {
@@ -21,15 +22,19 @@ public class MainWindow extends JFrame implements ActionListener{
 		
 		this.b1= new JButton("Customers");
 		this.b2= new JButton("Consulta");
+		this.b3= new JButton("Orders");
 		
 		super.setLayout(null);
 		this.b1.setBounds(100, 30, 100, 50);
 		this.b1.addActionListener(this);
 		this.b2.setBounds(300, 30, 100, 50);
 		this.b2.addActionListener(this);
+		this.b3.setBounds(100, 100, 100, 50);
+		this.b3.addActionListener(this);
 		
 		super.getContentPane().add(this.b1);
 		super.getContentPane().add(this.b2);
+		super.getContentPane().add(this.b3);
 		
 		super.setSize(500, 500);
 		super.setTitle("Teste");
@@ -46,6 +51,9 @@ public class MainWindow extends JFrame implements ActionListener{
 		}
 		else if(e.getSource() == this.b2) { //Chama a janela de qualquer consulta
 			this.acess.query();
+		}
+		else if(e.getSource() == this.b3) { //Chama a janela de Orders
+			new OrderWindow();
 		}
 	}
 }

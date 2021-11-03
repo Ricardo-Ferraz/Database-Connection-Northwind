@@ -84,7 +84,7 @@ public class Customer {
 		}
 		Customer c = (Customer) o;
 
-		return c.getCustomerId() == this.customerId;
+		return c.getCustomerId().equalsIgnoreCase(this.customerId);
 	}
 
 	@Override
