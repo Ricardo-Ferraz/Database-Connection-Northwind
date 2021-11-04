@@ -78,7 +78,7 @@ public class OrderDAO {
 		throw new Exception("orderId não encontrado no banco!");
 	}
 
-	public String create(String[] inputs) throws SQLException { //OrderID é gerado automaticamente, tem q ver como pegar esse valor e montar a expressao sem ele
+	public String create(String[] inputs) throws SQLException {
 		String sql = "INSERT INTO Orders(CustomerID,EmployeeID,OrderDate,RequiredDate,ShippedDate,ShipVia,Freight,ShipName,ShipAddress,ShipCity,ShipRegion,ShipPostalCode,ShipCountry) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
 		Connection con = ConnectionFactory.getConnection();
 		PreparedStatement p = con.prepareStatement(sql);
@@ -111,50 +111,5 @@ public class OrderDAO {
 		
 		return aux;
 	}
-/*
-	public int delete(String orderId) throws SQLException{
-		String sql = "DELETE FROM Orders WHERE orderId= '"+orderId+"';";
-		
-		Connection con = ConnectionFactory.getConnection();
-		Statement stmt = con.createStatement();
-		
-		int rows= stmt.executeUpdate(sql);
-		
-		ConnectionFactory.closeConnection(con, stmt);
-		return rows;
-	
-	}
-	
-	public int update(String[] inputs, String orderId) throws SQLException, Exception{
-		String sql= "UPDATE Orders SET OrderID=?, CompanyName=?, ContactName=?, ContactTitle=?, Address=?, City=?, Region=?, PostalCode=?, Country=?, Phone=?, Fax=? WHERE OrderID= '"+orderId+"';";
-		Connection con = ConnectionFactory.getConnection();
-		PreparedStatement p = con.prepareStatement(sql);
-		Order c = readObject(orderId);
-		
-		for(int i=1; i <= inputs.length; i++) {
-			if(inputs[i-1] != null) {
-				p.setString(i, inputs[i-1]);
-			}
-			else {
-				p.setString(i, c.getIndex(i));
-			}
-		}
-		int rows= p.executeUpdate();
-		ConnectionFactory.closeConnection(con, p);
-		return rows;
-	}
 
-	
-	private Order readObject(String orderId) throws Exception, SQLException {
-		List<Order> list = readAll();
-
-		for (Order c : list) {
-			if (c.getOrderId().equalsIgnoreCase(orderId)) {
-				return c;
-			}
-		}
-		
-		return null;
-	}
-*/
 }

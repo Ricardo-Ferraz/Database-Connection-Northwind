@@ -69,7 +69,8 @@ public class OrderView {
 	}
 
 	public void create() {
-		String query="";
+		String query = "";
+		int rows = 0;
 		try {
 			int opcao = JOptionPane.showConfirmDialog(null, this.input, "Informe os dados",
 					JOptionPane.OK_CANCEL_OPTION);
@@ -85,7 +86,7 @@ public class OrderView {
 					opcao = JOptionPane.showConfirmDialog(null, this.inputDetails, "Informe os dados da Compra",
 							JOptionPane.OK_CANCEL_OPTION);
 					if (opcao == JOptionPane.OK_OPTION) {
-						query += "("+newOrderId+",";
+						query += "(" + newOrderId + ",";
 						String[] inputsDetails = this.inputFields(this.inputDetails);
 						for (int i = 0; i < inputsDetails.length; i++) {
 							if (i == inputsDetails.length - 1) {
@@ -99,14 +100,14 @@ public class OrderView {
 
 					opcao2 = JOptionPane.showConfirmDialog(null, "Deseja incluir mais compras?", "Escolha",
 							JOptionPane.YES_NO_OPTION);
-					if(opcao2 == JOptionPane.YES_OPTION) {
+					if (opcao2 == JOptionPane.YES_OPTION) {
 						query += ",";
 					}
 
 				} while (opcao2 == JOptionPane.YES_OPTION);
+				rows = this.controller.createDetails(query);
+				ShowMessage.showInfomationMessage("Quantidade de linhas afetadas: " + rows, "Sucesso!");
 			}
-			int rows= this.controller.createDetails(query);
-			ShowMessage.showInfomationMessage("Quantidade de linhas afetadas: "+rows, "Sucesso!");
 
 		} catch (SQLException e) {
 			ShowMessage.showErrorMessage(e.getMessage());
@@ -116,36 +117,6 @@ public class OrderView {
 		}
 	}
 
-	/*
-	 * public void delete() { try {
-	 * 
-	 * int opcao = JOptionPane.showConfirmDialog(null, this.orderId,
-	 * "Informe o CustomerId", JOptionPane.OK_CANCEL_OPTION); if (opcao ==
-	 * JOptionPane.OK_OPTION) { int rows=
-	 * this.controller.delete(this.orderId.getText());
-	 * ShowMessage.showInfomationMessage("Linhas afetadas: " + rows, "Sucesso!"); }
-	 * 
-	 * } catch (SQLException e) { ShowMessage.showErrorMessage(e.getMessage()); }
-	 * finally { this.orderId.setText(""); } }
-	 * 
-	 * public void update() { try {
-	 * 
-	 * int opcao = JOptionPane.showConfirmDialog(null, this.orderId,
-	 * "Informe o CustomerId para atualização", JOptionPane.OK_CANCEL_OPTION); if
-	 * (opcao == JOptionPane.OK_OPTION) {
-	 * this.controller.readOne(this.orderId.getText()); String aux=
-	 * this.orderId.getText(); this.orderId.setText(""); opcao =
-	 * JOptionPane.showConfirmDialog(null, this.input,
-	 * "Informe os dados para Atualizar", JOptionPane.OK_CANCEL_OPTION); if (opcao
-	 * == JOptionPane.OK_OPTION) { String[] inputs = this.inputFields();
-	 * this.cleanEmptyFields(inputs); int rows = this.controller.update(inputs,
-	 * aux); ShowMessage.showInfomationMessage("Linhas afetadas: " + rows,
-	 * "Sucesso!"); } }
-	 * 
-	 * }catch(SQLException e) { ShowMessage.showErrorMessage(e.getMessage());
-	 * }catch(Exception e) { ShowMessage.showErrorMessage(e.getMessage()); }finally
-	 * { this.cleanInputFields(); } }
-	 */
 	private String[] inputFields(Object[] input) {
 		String[] fields = new String[input.length / 2];
 		int cont = 0;

@@ -102,50 +102,5 @@ public class OrderDetailDAO {
 		ConnectionFactory.closeConnection(con, st);
 		return rows;
 	}
-/*
-	public int delete(String orderId) throws SQLException{
-		String sql = "DELETE FROM Orders WHERE orderId= '"+orderId+"';";
-		
-		Connection con = ConnectionFactory.getConnection();
-		Statement stmt = con.createStatement();
-		
-		int rows= stmt.executeUpdate(sql);
-		
-		ConnectionFactory.closeConnection(con, stmt);
-		return rows;
-	
-	}
-	
-	public int update(String[] inputs, String orderId) throws SQLException, Exception{
-		String sql= "UPDATE Orders SET OrderID=?, CompanyName=?, ContactName=?, ContactTitle=?, Address=?, City=?, Region=?, PostalCode=?, Country=?, Phone=?, Fax=? WHERE OrderID= '"+orderId+"';";
-		Connection con = ConnectionFactory.getConnection();
-		PreparedStatement p = con.prepareStatement(sql);
-		OrderDetail c = readObject(orderId);
-		
-		for(int i=1; i <= inputs.length; i++) {
-			if(inputs[i-1] != null) {
-				p.setString(i, inputs[i-1]);
-			}
-			else {
-				p.setString(i, c.getIndex(i));
-			}
-		}
-		int rows= p.executeUpdate();
-		ConnectionFactory.closeConnection(con, p);
-		return rows;
-	}
 
-	
-	private OrderDetail readObject(String orderId) throws Exception, SQLException {
-		List<OrderDetail> list = readAll();
-
-		for (OrderDetail c : list) {
-			if (c.getOrderId().equalsIgnoreCase(orderId)) {
-				return c;
-			}
-		}
-		
-		return null;
-	}
-*/
 }

@@ -18,7 +18,7 @@ public class ControllerOrder {
 		return this.dao.readOne(customerId)+this.details.readAllFromId(customerId);
 	}
 	
-	public String create(String[] inputs) throws SQLException{ //Tem que ser trabalhado pra incluir os Order Details e retirar o OrderID do preenchimento
+	public String create(String[] inputs) throws SQLException{
 		return this.dao.create(inputs);
 	}
 	
