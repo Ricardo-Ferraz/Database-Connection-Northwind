@@ -1,6 +1,8 @@
 package br.com.unicap.bd2.view;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -26,10 +28,19 @@ public class OrderView {
 	private JTextField shipPostalCode = new JTextField(10);
 	private JTextField shipCountry = new JTextField(15);
 
-	private Object[] input = { "OrderID: ", this.orderId, "CustomerID: ", this.customerId, "EmployeeID: ",
-			this.employeeId, "OrderDate: ", this.orderDate, "RequiredDate: ", this.requiredDate, "ShippedDate: ", this.shippedDate,
-			"ShipVia: ", this.shipVia, "Freight: ", this.freight, "ShipName: ", this.shipName, "ShippedAddress: ", this.shipAddress,
-			"ShipCity: ", this.shipCity, "ShipRegion: ", this.shipRegion, "ShipPostalCode: ", this.shipPostalCode, "ShipCountry: ", this.shipCountry };
+	private JTextField productId = new JTextField(15);
+	private JTextField unitPrice = new JTextField(15);
+	private JTextField quantity = new JTextField(15);
+	private JTextField discount = new JTextField(15);
+
+	private Object[] input = { "CustomerID: ", this.customerId, "EmployeeID: ", this.employeeId, "OrderDate: ",
+			this.orderDate, "RequiredDate: ", this.requiredDate, "ShippedDate: ", this.shippedDate, "ShipVia: ",
+			this.shipVia, "Freight: ", this.freight, "ShipName: ", this.shipName, "ShippedAddress: ", this.shipAddress,
+			"ShipCity: ", this.shipCity, "ShipRegion: ", this.shipRegion, "ShipPostalCode: ", this.shipPostalCode,
+			"ShipCountry: ", this.shipCountry };
+
+	private Object[] inputDetails = { "ProductID: ", this.productId, "UnitPrice: ", this.unitPrice, "Quantity: ",
+			this.quantity, "Discount: ", this.discount };
 
 	public void read() {
 		try {
@@ -58,74 +69,90 @@ public class OrderView {
 	}
 
 	public void create() {
+		String query="";
 		try {
 			int opcao = JOptionPane.showConfirmDialog(null, this.input, "Informe os dados",
 					JOptionPane.OK_CANCEL_OPTION);
 			if (opcao == JOptionPane.OK_OPTION) {
-				String[] inputs = this.inputFields();
+				String[] inputs = this.inputFields(this.input);
 				this.cleanEmptyFields(inputs);
-				int rows = this.controller.create(inputs);
-				ShowMessage.showInfomationMessage("Linhas afetadas: " + rows, "Sucesso!");
+				String newOrderId = this.controller.create(inputs);
+				ShowMessage.showInfomationMessage("OrderId gerado: " + newOrderId, "Sucesso!");
+				int opcao2;
+				query = "INSERT INTO [Order Details](OrderID, ProductID, UnitPrice, Quantity, Discount) VALUES ";
+				do {
+					this.cleanInputFields(this.inputDetails);
+					opcao = JOptionPane.showConfirmDialog(null, this.inputDetails, "Informe os dados da Compra",
+							JOptionPane.OK_CANCEL_OPTION);
+					if (opcao == JOptionPane.OK_OPTION) {
+						query += "("+newOrderId+",";
+						String[] inputsDetails = this.inputFields(this.inputDetails);
+						for (int i = 0; i < inputsDetails.length; i++) {
+							if (i == inputsDetails.length - 1) {
+								query += inputsDetails[i];
+							} else {
+								query += inputsDetails[i] + ",";
+							}
+						}
+						query += ")";
+					}
+
+					opcao2 = JOptionPane.showConfirmDialog(null, "Deseja incluir mais compras?", "Escolha",
+							JOptionPane.YES_NO_OPTION);
+					if(opcao2 == JOptionPane.YES_OPTION) {
+						query += ",";
+					}
+
+				} while (opcao2 == JOptionPane.YES_OPTION);
 			}
+			int rows= this.controller.createDetails(query);
+			ShowMessage.showInfomationMessage("Quantidade de linhas afetadas: "+rows, "Sucesso!");
+
 		} catch (SQLException e) {
 			ShowMessage.showErrorMessage(e.getMessage());
 		} finally {
-			this.cleanInputFields();
+			this.cleanInputFields(this.inputDetails);
+			this.cleanInputFields(this.input);
 		}
 	}
-/*
-	public void delete() {
-		try {
 
-			int opcao = JOptionPane.showConfirmDialog(null, this.orderId, "Informe o CustomerId",
-					JOptionPane.OK_CANCEL_OPTION);
-			if (opcao == JOptionPane.OK_OPTION) {
-				int rows= this.controller.delete(this.orderId.getText());
-				ShowMessage.showInfomationMessage("Linhas afetadas: " + rows, "Sucesso!");
-			}
-
-		} catch (SQLException e) {
-			ShowMessage.showErrorMessage(e.getMessage());
-		} finally {
-			this.orderId.setText("");
-		}
-	}
-	
-	public void update() {
-		try {
-			
-			int opcao = JOptionPane.showConfirmDialog(null, this.orderId, "Informe o CustomerId para atualização",
-					JOptionPane.OK_CANCEL_OPTION);
-			if (opcao == JOptionPane.OK_OPTION) {
-				this.controller.readOne(this.orderId.getText());
-				String aux= this.orderId.getText();
-				this.orderId.setText("");
-				opcao = JOptionPane.showConfirmDialog(null, this.input, "Informe os dados para Atualizar",
-						JOptionPane.OK_CANCEL_OPTION);
-				if (opcao == JOptionPane.OK_OPTION) {
-					String[] inputs = this.inputFields();
-					this.cleanEmptyFields(inputs);
-					int rows = this.controller.update(inputs, aux);
-					ShowMessage.showInfomationMessage("Linhas afetadas: " + rows, "Sucesso!");
-				}
-			}
-			
-		}catch(SQLException e) {
-			ShowMessage.showErrorMessage(e.getMessage());
-		}catch(Exception e) {
-			ShowMessage.showErrorMessage(e.getMessage());
-		}finally {
-			this.cleanInputFields();
-		}
-	}
-*/
-	private String[] inputFields() {
-		String[] fields = new String[this.input.length / 2];
+	/*
+	 * public void delete() { try {
+	 * 
+	 * int opcao = JOptionPane.showConfirmDialog(null, this.orderId,
+	 * "Informe o CustomerId", JOptionPane.OK_CANCEL_OPTION); if (opcao ==
+	 * JOptionPane.OK_OPTION) { int rows=
+	 * this.controller.delete(this.orderId.getText());
+	 * ShowMessage.showInfomationMessage("Linhas afetadas: " + rows, "Sucesso!"); }
+	 * 
+	 * } catch (SQLException e) { ShowMessage.showErrorMessage(e.getMessage()); }
+	 * finally { this.orderId.setText(""); } }
+	 * 
+	 * public void update() { try {
+	 * 
+	 * int opcao = JOptionPane.showConfirmDialog(null, this.orderId,
+	 * "Informe o CustomerId para atualização", JOptionPane.OK_CANCEL_OPTION); if
+	 * (opcao == JOptionPane.OK_OPTION) {
+	 * this.controller.readOne(this.orderId.getText()); String aux=
+	 * this.orderId.getText(); this.orderId.setText(""); opcao =
+	 * JOptionPane.showConfirmDialog(null, this.input,
+	 * "Informe os dados para Atualizar", JOptionPane.OK_CANCEL_OPTION); if (opcao
+	 * == JOptionPane.OK_OPTION) { String[] inputs = this.inputFields();
+	 * this.cleanEmptyFields(inputs); int rows = this.controller.update(inputs,
+	 * aux); ShowMessage.showInfomationMessage("Linhas afetadas: " + rows,
+	 * "Sucesso!"); } }
+	 * 
+	 * }catch(SQLException e) { ShowMessage.showErrorMessage(e.getMessage());
+	 * }catch(Exception e) { ShowMessage.showErrorMessage(e.getMessage()); }finally
+	 * { this.cleanInputFields(); } }
+	 */
+	private String[] inputFields(Object[] input) {
+		String[] fields = new String[input.length / 2];
 		int cont = 0;
 
-		for (int i = 0; i < this.input.length; i++) {
+		for (int i = 0; i < input.length; i++) {
 			if ((i % 2 != 0)) {
-				JTextField aux = (JTextField) this.input[i];
+				JTextField aux = (JTextField) input[i];
 				fields[cont] = aux.getText().trim();
 				cont++;
 			}
@@ -134,10 +161,10 @@ public class OrderView {
 		return fields;
 	}
 
-	private void cleanInputFields() {
-		for (int i = 0; i < this.input.length; i++) {
+	private void cleanInputFields(Object[] input) {
+		for (int i = 0; i < input.length; i++) {
 			if (i % 2 != 0) {
-				JTextField aux = (JTextField) this.input[i];
+				JTextField aux = (JTextField) input[i];
 				aux.setText("");
 			}
 		}

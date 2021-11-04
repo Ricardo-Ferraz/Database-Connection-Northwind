@@ -6,8 +6,10 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+
 
 import br.com.unicap.bd2.model.Order;
 import br.com.unicap.bd2.util.ConnectionFactory;
@@ -17,7 +19,6 @@ public class OrderDAO {
 	private static OrderDAO instance;
 
 	private OrderDAO() {
-
 	}
 
 	public static OrderDAO getInstance() {
@@ -77,17 +78,38 @@ public class OrderDAO {
 		throw new Exception("orderId não encontrado no banco!");
 	}
 
-	public int create(String[] inputs) throws SQLException { //OrderID é gerado automaticamente, tem q ver como pegar esse valor e montar a expressao sem ele
-		String sql = "INSERT INTO Orders(OrderID,CustomerID,EmployeeID,OrderDate,RequiredDate,ShippedDate,ShipVia,Freight,ShipName,ShipAddress,ShipCity,ShipRegion,ShipPostalCode,ShipCountry) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+	public String create(String[] inputs) throws SQLException { //OrderID é gerado automaticamente, tem q ver como pegar esse valor e montar a expressao sem ele
+		String sql = "INSERT INTO Orders(CustomerID,EmployeeID,OrderDate,RequiredDate,ShippedDate,ShipVia,Freight,ShipName,ShipAddress,ShipCity,ShipRegion,ShipPostalCode,ShipCountry) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
 		Connection con = ConnectionFactory.getConnection();
 		PreparedStatement p = con.prepareStatement(sql);
 		for(int i=1; i <= inputs.length; i++) {
-			p.setString(i, inputs[i-1]);
+			if((i-1 == 2 || i-1 == 3 || i-1 == 4) && inputs[i-1] != null) {
+		        Timestamp date = Timestamp.valueOf(inputs[i-1]);
+		        p.setTimestamp(i, date);
+			}
+			else {
+				p.setString(i, inputs[i-1]);
+			}
+			
 		}
-		int rows= p.executeUpdate();
+		p.executeUpdate();
 		ConnectionFactory.closeConnection(con, p);
+		String aux= getNewOrderId();
+		return aux;
+	}
+	
+	private String getNewOrderId() throws SQLException{
+		String aux="";
+		String query= "SELECT * FROM Orders ORDER BY OrderID DESC ";
+		Connection con = ConnectionFactory.getConnection();
+		Statement st = con.createStatement();
+		ResultSet rs = st.executeQuery(query);
 		
-		return rows;
+		if(rs.next()) {
+			aux=rs.getString(1);
+		}
+		
+		return aux;
 	}
 /*
 	public int delete(String orderId) throws SQLException{

@@ -93,6 +93,15 @@ public class OrderDetailDAO {
 		
 		return rows;
 	}
+	
+	public int createDetails(String query) throws SQLException{
+		Connection con = ConnectionFactory.getConnection();
+		Statement st = con.createStatement();
+		
+		int rows= st.executeUpdate(query);
+		ConnectionFactory.closeConnection(con, st);
+		return rows;
+	}
 /*
 	public int delete(String orderId) throws SQLException{
 		String sql = "DELETE FROM Orders WHERE orderId= '"+orderId+"';";
