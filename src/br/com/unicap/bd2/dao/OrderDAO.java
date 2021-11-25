@@ -17,7 +17,7 @@ import br.com.unicap.bd2.util.ConnectionFactory;
 public class OrderDAO {
 
 	private static OrderDAO instance;
-
+	
 	private OrderDAO() {
 	}
 
@@ -75,7 +75,7 @@ public class OrderDAO {
 		for (Order c : list) {
 			return c.toString();
 		}
-		throw new Exception("orderId não encontrado no banco!");
+		throw new Exception("orderId nï¿½o encontrado no banco!");
 	}
 
 	public String create(String[] inputs) throws SQLException {
@@ -111,5 +111,4 @@ public class OrderDAO {
 		
 		return aux;
 	}
-
 }

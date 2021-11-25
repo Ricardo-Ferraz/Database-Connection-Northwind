@@ -16,8 +16,13 @@ public class OrderDetailDAO {
 
 	private static OrderDetailDAO instance;
 
-	private OrderDetailDAO() {
-
+	private OrderDetailDAO()  {
+		try {
+			this.setTrigger();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public static OrderDetailDAO getInstance() {
@@ -69,7 +74,7 @@ public class OrderDetailDAO {
 		for (OrderDetail c : list) {
 			return c.toString();
 		}
-		throw new Exception("Order Detail não encontrado no banco!");
+		throw new Exception("Order Detail nï¿½o encontrado no banco!");
 	}
 	
 	public List<OrderDetail> readAllFromId(String orderId) throws Exception, SQLException {
@@ -78,7 +83,7 @@ public class OrderDetailDAO {
 		if(list.size() > 0) {
 			return list;
 		}
-		throw new Exception("orderId não encontrado no banco!");
+		throw new Exception("orderId nï¿½o encontrado no banco!");
 	}
 
 	public int create(String[] inputs) throws SQLException {
@@ -102,5 +107,24 @@ public class OrderDetailDAO {
 		ConnectionFactory.closeConnection(con, st);
 		return rows;
 	}
-
+	
+	private void setTrigger() throws SQLException {
+		String sql = "CREATE TRIGGER ForbiddenBrazil ON [Order Details] \n"
+				+ "FOR INSERT\n"
+				+ "AS \n"
+				+ "IF (\n"
+				+ "        SELECT TOP(1) SUM(inserted.Quantity) FROM inserted JOIN Orders ON inserted.OrderID = Orders.OrderID\n"
+				+ "    ) < 10\n"
+				+ "    AND \n"
+				+ "    (\n"
+				+ "        SELECT TOP(1) Orders.ShipCountry FROM Orders JOIN inserted ON inserted.OrderID = Orders.OrderID\n"
+				+ "    ) = 'Brazil'\n"
+				+ "BEGIN\n"
+				+ "PRINT 'Ã‰ preciso comprar no mÃ­nimo 10 produtos no total caso seu navio saia do Brasil'\n"
+				+ "ROLLBACK TRANSACTION\n"
+				+ "END";
+		Connection con = ConnectionFactory.getConnection();
+		PreparedStatement statement = con.prepareStatement(sql);
+		ConnectionFactory.closeConnection(con, statement);
+	}
 }

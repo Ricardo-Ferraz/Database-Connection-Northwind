@@ -9,8 +9,8 @@ import java.sql.Statement;
 
 public abstract class ConnectionFactory {
 
-	private static final String USER = "ricardo";
-	private static final String PASSWORD = "1234";
+	private static final String USER = "admin";
+	private static final String PASSWORD = "nimda";
 	private static final String PORT = "1433";
 	private static final String DATABASE = "Northwind";
 	private static final String URL = "jdbc:sqlserver://localhost:" + PORT + ";user=" + USER + ";password=" + PASSWORD
