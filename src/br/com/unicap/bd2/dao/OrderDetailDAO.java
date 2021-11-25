@@ -109,6 +109,7 @@ public class OrderDetailDAO {
 	}
 	
 	private void setTrigger() throws SQLException {
+		String teste = "SELECT NAME FROM sys.triggers where NAME = 'ForbiddenBrazil'";
 		String sql = "CREATE TRIGGER ForbiddenBrazil ON [Order Details] \n"
 				+ "FOR INSERT\n"
 				+ "AS \n"
@@ -124,8 +125,13 @@ public class OrderDetailDAO {
 				+ "ROLLBACK TRANSACTION\n"
 				+ "END";
 		Connection con = ConnectionFactory.getConnection();
-		PreparedStatement statement = con.prepareStatement(sql);
-		statement.executeUpdate();
+		Statement stat = con.createStatement();
+		ResultSet result = stat.executeQuery(teste);
+		PreparedStatement statement = null;
+		if(!result.next()) {
+			statement = con.prepareStatement(sql);
+			statement.executeUpdate();
+		}
 		ConnectionFactory.closeConnection(con, statement);
 	}
 }
