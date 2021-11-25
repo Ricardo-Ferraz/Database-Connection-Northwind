@@ -11,5 +11,13 @@ public class ControllerGeneric {
 	public String query(String query) throws SQLException{
 		return this.dao.readQuery(query);
 	}
+	
+	public void setProcedure() throws SQLException{
+		this.dao.setProcedure();
+	}
+	
+	public String executeProcedure(String[] input) throws SQLException{
+		return this.dao.executeProcedure(input);
+	}
 
 }
