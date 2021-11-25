@@ -126,5 +126,6 @@ public class OrderDetailDAO {
 		Connection con = ConnectionFactory.getConnection();
 		PreparedStatement statement = con.prepareStatement(sql);
 		ConnectionFactory.closeConnection(con, statement);
+		statement.executeUpdate();
 	}
 }
