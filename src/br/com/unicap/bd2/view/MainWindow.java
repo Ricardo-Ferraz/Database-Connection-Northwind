@@ -44,7 +44,7 @@ public class MainWindow extends JFrame implements ActionListener{
 		super.getContentPane().add(this.b4);
 		
 		super.setSize(500, 500);
-		super.setTitle("Teste");
+		super.setTitle("Main Window");
 		super.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		super.setLocationRelativeTo(null);
 		super.setResizable(false);

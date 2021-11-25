@@ -47,7 +47,7 @@ public class CustomerWindow extends JFrame implements ActionListener{
 		super.getContentPane().add(this.b5);
         
 		super.setSize(500,500);
-		super.setTitle("Teste Customers");
+		super.setTitle("Customer Window");
 		super.setVisible(true);
 		super.setResizable(false);
 	}

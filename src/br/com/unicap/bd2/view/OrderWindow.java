@@ -35,7 +35,7 @@ public class OrderWindow extends JFrame implements ActionListener{
 		super.getContentPane().add(this.b3);
         
 		super.setSize(500,500);
-		super.setTitle("Teste Orders");
+		super.setTitle("Order Window");
 		super.setVisible(true);
 		super.setResizable(false);
 	}
